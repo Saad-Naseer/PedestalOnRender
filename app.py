@@ -78,7 +78,7 @@ class FlaskSocketIOApp:
         """Run the Flask app with SocketIO."""
         self.socketio.run(self.app, host=self.host, port=self.port)
 app_instance = FlaskSocketIOApp()
-app.= app_instance.app
+app = app_instance.app
 
 if __name__ == '__main__':
     #app = FlaskSocketIOApp()
