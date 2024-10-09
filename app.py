@@ -3,7 +3,10 @@ from flask_socketio import SocketIO, emit
 from flask_cors import CORS
 import serial.tools.list_ports
 from pedestel import Pedestal
-import eventlet
+import gevent
+import gevent.monkey
+gevent.monkey.patch_all()
+GEVENT_SUPPORT=True
 
 class FlaskSocketIOApp:
     def __init__(self, host='0.0.0.0', port=5000):
@@ -12,7 +15,7 @@ class FlaskSocketIOApp:
         CORS(self.app)  # Enable CORS for all routes
 
         # Initialize SocketIO
-        self.socketio = SocketIO(self.app, cors_allowed_origins="*", async_mode='eventlet')  # Allow connections from all origins
+        self.socketio = SocketIO(self.app, cors_allowed_origins="*")  # Allow connections from all origins
 
         # Host and port for the server
         self.host = host
