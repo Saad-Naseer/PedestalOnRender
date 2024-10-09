@@ -7,7 +7,7 @@ from pedestel import Pedestal
 class FlaskSocketIOApp:
     def __init__(self, host='0.0.0.0', port=5000):
         # Initialize Flask app
-        self.app = Flask(__name__)
+        self.app = Flask(__name__, static_folder='static')
         CORS(self.app)  # Enable CORS for all routes
 
         # Initialize SocketIO
