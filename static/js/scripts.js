@@ -1,4 +1,4 @@
-const socket = io.connect();
+const socket = io.connect("http//localhost:5000);
 
 // Store whether the device is successfully connected
 let deviceConnected = false;
