@@ -4,7 +4,6 @@ cffi==1.17.1
 click==8.1.7
 colorama==0.4.6
 dnspython==2.6.1
-eventlet==0.37.0
 flask==3.0.3
 Flask-Cors==5.0.0
 Flask-SocketIO==5.4.1
