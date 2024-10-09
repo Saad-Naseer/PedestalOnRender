@@ -1,5 +1,5 @@
 //const socket = io.connect('http://localhost:5000');
-const socket = io.connect();
+const socket = io.connect('https://pedestalonrender.onrender.com/');
 
 
 // Store whether the device is successfully connected
