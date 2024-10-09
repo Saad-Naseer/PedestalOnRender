@@ -3,19 +3,15 @@ from flask_socketio import SocketIO, emit
 from flask_cors import CORS
 import serial.tools.list_ports
 from pedestel import Pedestal
-import gevent
-import gevent.monkey
-gevent.monkey.patch_all()
-GEVENT_SUPPORT=True
 
 class FlaskSocketIOApp:
     def __init__(self, host='0.0.0.0', port=5000):
         # Initialize Flask app
-        self.app = Flask(__name__, static_folder='static')
+        self.app = Flask(__name__)
         CORS(self.app)  # Enable CORS for all routes
 
         # Initialize SocketIO
-        self.socketio = SocketIO(self.app, cors_allowed_origins="*", async_mode='gevent')  # Allow connections from all origins
+        self.socketio = SocketIO(self.app, cors_allowed_origins="*")  # Allow connections from all origins
 
         # Host and port for the server
         self.host = host
@@ -54,13 +50,6 @@ class FlaskSocketIOApp:
                 self.pedestal.moveDown()
             if data['message'] == 'reset':
                 self.pedestal.moveToHeight_MM(height_mm=300)
-        
-        # Handle client disconnect
-        @self.socketio.on('disconnect')
-        def handle_disconnect():
-            print("Client disconnected")
-            # Clean up USB or serial connection
-            self.disconnect_device()
 
     def list_usb_devices(self):
         """List connected USB devices."""
@@ -79,8 +68,7 @@ class FlaskSocketIOApp:
             DATA_BITS = 8
             STOP_BITS = 1
             PARITY = serial.PARITY_NONE
-            if self.pedestal is None:
-                self.pedestal = Pedestal(SERIAL_PORT, BAUD_RATE, DATA_BITS, STOP_BITS, PARITY)
+            self.pedestal = Pedestal(SERIAL_PORT, BAUD_RATE, DATA_BITS, STOP_BITS, PARITY)
             return {'status': 'success', 'message': 'connected'}
         except Exception as e:
             return {'status': 'error', 'message': str(e)}
@@ -89,18 +77,6 @@ class FlaskSocketIOApp:
     def run(self):
         """Run the Flask app with SocketIO."""
         self.socketio.run(self.app, host=self.host, port=self.port)
-    
-    def disconnect_device(self):
-        """Disconnect the current USB/serial connection."""
-        if self.pedestal:
-            try:
-                # Close the serial connection if it exists
-                self.pedestal.close_serial()
-                print("USB/Serial connection closed")
-            except Exception as e:
-                print(f"Error while closing connection: {str(e)}")
-            finally:
-                self.pedestal = None
 
 app_instance = FlaskSocketIOApp()
 app = app_instance.app
