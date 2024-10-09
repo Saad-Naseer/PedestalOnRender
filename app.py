@@ -84,7 +84,9 @@ class FlaskSocketIOApp:
 
     def run(self):
         """Run the Flask app with SocketIO."""
-        self.socketio.run(self.app, host=self.host, port=self.port)
+        #self.socketio.run(self.app, host=self.host, port=self.port)
+        self.socketio.run(self.app, debug=debug)
+
     
     def disconnect_device(self):
         """Disconnect the current USB/serial connection."""
