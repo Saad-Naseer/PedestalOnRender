@@ -1,6 +1,4 @@
-//const socket = io.connect('http://localhost:5000');
-const socket = io.connect();
-
+const socket = io.connect('http://localhost:5000');
 
 // Store whether the device is successfully connected
 let deviceConnected = false;
@@ -110,28 +108,5 @@ function resetCommunication() {
     socket.emit('send_data', data);  // 'send_data' is the event name for your server to listen to
 }
 
-// Handle socket disconnection
-socket.on('disconnect', function() {
-    
-    // Perform necessary cleanup actions
-    if (deviceConnected) {
-        stopSendingData(); // Stop any ongoing data transmissions
-        deviceConnected = false;
-        selectedDevice = null;
-
-        // Inform the server to close the USB/serial connection
-        socket.emit('disconnect', 1);
-
-        // Disable buttons
-        document.getElementById('upButton').disabled = true;
-        document.getElementById('downButton').disabled = true;
-        document.getElementById('resetButton').disabled = true;
-
-        // Display disconnected message
-        const responseDiv = document.getElementById('response');
-        responseDiv.className = 'error';
-        responseDiv.textContent = 'Disconnected from device.';
-    }
-});
 // Automatically fetch USB devices when the page loads
 window.onload = getUsbDevices;
