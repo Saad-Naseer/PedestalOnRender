@@ -15,7 +15,7 @@ class FlaskSocketIOApp:
         CORS(self.app)  # Enable CORS for all routes
 
         # Initialize SocketIO
-        self.socketio = SocketIO(self.app, cors_allowed_origins="*")  # Allow connections from all origins
+        self.socketio = SocketIO(self.app, cors_allowed_origins="*", async_mode='gevent')  # Allow connections from all origins
 
         # Host and port for the server
         self.host = host
