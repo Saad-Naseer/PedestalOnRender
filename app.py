@@ -3,6 +3,7 @@ from flask_socketio import SocketIO, emit
 from flask_cors import CORS
 import serial.tools.list_ports
 from pedestel import Pedestal
+import eventlet
 
 class FlaskSocketIOApp:
     def __init__(self, host='0.0.0.0', port=5000):
@@ -11,7 +12,7 @@ class FlaskSocketIOApp:
         CORS(self.app)  # Enable CORS for all routes
 
         # Initialize SocketIO
-        self.socketio = SocketIO(self.app, cors_allowed_origins="*")  # Allow connections from all origins
+        self.socketio = SocketIO(self.app, cors_allowed_origins="*", async_mode='eventlet')  # Allow connections from all origins
 
         # Host and port for the server
         self.host = host
@@ -84,9 +85,7 @@ class FlaskSocketIOApp:
 
     def run(self):
         """Run the Flask app with SocketIO."""
-        #self.socketio.run(self.app, host=self.host, port=self.port)
-        self.socketio.run(self.app, debug=False)
-
+        self.socketio.run(self.app, host=self.host, port=self.port)
     
     def disconnect_device(self):
         """Disconnect the current USB/serial connection."""
